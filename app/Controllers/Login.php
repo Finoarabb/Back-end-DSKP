@@ -37,6 +37,7 @@ class Login extends BaseController
         $payload = array(
             "uid" => $user['id'],
             "username"=>$user['username'],
+            "role"=>$user['role'],
         );        
         $token = generate_jwt($payload);
         return $this->respond(['token'=>$token]);

@@ -18,8 +18,17 @@ use Firebase\JWT\Key;
 
 
 
-    function verify_jwt($token)
+    function verify_jwt()
     {
+        $request = service('request');
+
+        // Check if a JWT token is present in the request headers
+        $header = $request->getHeaderLine('Authorization');
+        if (empty($header)) {
+            return false; // No token found, user is not authenticated
+        }
+        $token = str_replace('Bearer ',"",$header);
+
         $key = getenv('TOKEN_SECRET');
         try {
             $decoded=JWT::decode($token, new Key($key, 'HS256'));
@@ -31,17 +40,9 @@ use Firebase\JWT\Key;
 
     function isLoggedIn()
     {
-        $request = service('request');
-
-        // Check if a JWT token is present in the request headers
-        $header = $request->getHeaderLine('Authorization');
-        if (empty($header)) {
-            return false; // No token found, user is not authenticated
-        }
-        $token = str_replace('Bearer ',"",$header);
-
+        
         // Verify the JWT token and return the result
-        $result = verify_jwt($token);
+        $result = verify_jwt();
         if ($result!==false) return true;
         return false;
     }

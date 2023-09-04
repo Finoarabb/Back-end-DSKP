@@ -16,7 +16,7 @@ class Users extends Migration
             ],
             'nama'=>[
                 'type' => 'VARCHAR',
-                'constraint' => 50
+                'constraint' => 100
             ],
             'username' => [
                 'type' => 'VARCHAR',
@@ -25,7 +25,7 @@ class Users extends Migration
             ],
             'password' => [
                 'type' => 'VARCHAR',
-                'constraint' => 200
+                'constraint' => 50
             ],
             'role'=>[
                 'type' => 'VARCHAR',

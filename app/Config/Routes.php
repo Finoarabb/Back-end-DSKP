@@ -7,4 +7,11 @@ use CodeIgniter\Router\RouteCollection;
  */
 $routes->get('/', 'Home::index');
 $routes->post('login', 'Login::index');
-$routes->resource('user',['except'=>'new,edit']);
+$routes->get('me', 'User::me');
+$routes->resource('letter', ['only' => 'index,show,update','filter' => 'role:supervisor']);
+$routes->post('letter','Letter::create',['filter'=>'role:operator']);
+$routes->delete('letter/(:any)','Letter::delete/$1',['filter'=>'role:admin']);
+$routes->resource('user', ['except' => 'new,edit', 'filter' => 'role:admin']);
+$routes->get('approvedLetter', 'Letter::approvedLetter',['filter'=>'role:pimpinan']);
+$routes->post('dispose/(:any)', 'Disposisi::dispose/$1',['filter'=>'role:pimpinan']);
+$routes->get('disposedLetter', 'Disposisi::index');

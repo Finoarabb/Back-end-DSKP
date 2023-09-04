@@ -9,6 +9,7 @@ use CodeIgniter\Filters\Honeypot;
 use CodeIgniter\Filters\InvalidChars;
 use CodeIgniter\Filters\SecureHeaders;
 use App\Filters\AuthFilter;
+use App\Filters\Role;
 
 class Filters extends BaseConfig
 {
@@ -26,6 +27,7 @@ class Filters extends BaseConfig
         'invalidchars'  => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
         'auth' => AuthFilter::class,
+        'role' => Role::class,
     ];
 
     /**
@@ -37,7 +39,7 @@ class Filters extends BaseConfig
      */
     public array $globals = [
         'before' => [
-            'auth' =>['except'=>['login']]
+            'auth' => ['except' => ['login']]
             // 'honeypot',
             // 'csrf',
             // 'invalidchars',
@@ -69,5 +71,9 @@ class Filters extends BaseConfig
      * Example:
      * 'isLoggedIn' => ['before' => ['account/*', 'profiles/*']]
      */
-    public array $filters = [];
+    public array $filters = [
+        // 'role:admin'=>['before'=>['user/*']],
+        // 'role:pimpinan'=>['before'=>['approvedLetter']],
+        // 'role:operator'=>['before'=>['letter/create']],
+    ];
 }

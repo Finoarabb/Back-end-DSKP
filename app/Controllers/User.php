@@ -82,9 +82,9 @@ class User extends ResourceController
             'password'=> $this->request->getVar('password'),
             'nama'=> $this->request->getVar('nama'),
         ];
-        $user = $this->model->insert($data);
-        if($user===false) return $this->fail('Insert gagal');
-        return $this->respondCreated($this->model->find($user));
+        $user = $this->model->insert($data,false);
+        if(!$user) return $this->fail('Gagal Menambahkan User');
+        return $this->respondCreated($data);
     }
 
     /**
@@ -104,10 +104,10 @@ class User extends ResourceController
      */
     public function update($id = null)
     {
-        $rules = ['role'=>'required|in_list[admin,supervisor,staff,operator]'];
-        if(!$this->validate($rules)) return $this->fail('Invalid');       
+        $rules = ['role'=>'required|in_list[admin,pimpinan,staff,operator,supervisor]'];
+        if(!$this->validate($rules)) return $this->fail($this->validator->getErrors());       
         $role = $this->request->getJSON('role');
-        
+        if(empty($this->model->find($id))) return $this->fail('user tidak ditemukan');
         $result = $this->model->update($id, ['role' => $role]);
 
     if ($result) {
@@ -135,5 +135,11 @@ class User extends ResourceController
         } catch(Exception $e){
             return $this->fail('Gagal');
         }
+    }
+
+    public function me(){                
+        $data = verify_jwt();
+        $user_login=$this->model->find($data->uid);
+        return $this->respond($user_login);
     }
 }

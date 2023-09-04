@@ -5,8 +5,9 @@ namespace App\Filters;
 use CodeIgniter\Filters\FilterInterface;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
+use Config\Services;
 
-class Admin implements FilterInterface
+class Role implements FilterInterface
 {
     /**
      * Do whatever processing this filter needs to do.
@@ -23,9 +24,19 @@ class Admin implements FilterInterface
      *
      * @return mixed
      */
+
+     
     public function before(RequestInterface $request, $arguments = null)
     {
-        //
+        helper('jwtauth');
+        if(!isLoggedIn()) return Services::response()
+        ->setJSON(['msg' => 'Silahkan login terlebih dahulu'])
+        ->setStatusCode(ResponseInterface::HTTP_UNAUTHORIZED);
+        $userRole = verify_jwt()->role;
+        if($userRole!==$arguments[0]) 
+        return Services::response()
+        ->setJSON(['msg' => 'Maaf, Anda tidak memiliki akses'])
+        ->setStatusCode(ResponseInterface::HTTP_UNAUTHORIZED);
     }
 
     /**

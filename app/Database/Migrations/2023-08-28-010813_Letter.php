@@ -7,13 +7,15 @@ use CodeIgniter\Database\Migration;
 use function PHPSTORM_META\type;
 
 class Letter extends Migration
-{
+{   
     public function up()
     {
         $this->forge->addField([
             'no_surat' => [
-                'type' => 'INT',
-                'null' => false
+                'type' => 'VARCHAR',
+                'constraint' => '50',
+                'null' => false,
+                'unique'=>true
             ],
             'file' => [
                 'type' => 'VARCHAR',
@@ -33,9 +35,12 @@ class Letter extends Migration
             ],
             'Approval' =>[
                 'type' => 'boolean',
+            ],            
+            'created_at' =>[
+                'type' => 'datetime',
             ],
-            'disposisi' =>[
-                'type' => 'boolean',
+            'updated_at'=>[
+                'type' => 'datetime',
             ]
         ]);
         $this->forge->addKey('no_surat', true);
