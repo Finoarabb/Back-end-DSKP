@@ -29,10 +29,10 @@ class Login extends BaseController
         if (!$this->validate($rules,$errors))  return $this->fail($this->validator->getErrors());                                
         $model = new User();
         $user = $model->where('username', $this->request->getVar('username'))->first();
-        if (!$user) return $this->failNotFound('Username tidak ditemukan');
+        if (!$user) return $this->fail(['username'=>'Username tidak ditemukan']);
         if(
             $this->request->getVar('password')!==$user['password']
-        ) return $this->fail('Password Salah');
+        ) return $this->fail(['password'=>'Password Salah']);
         
         $payload = array(
             "uid" => $user['id'],
