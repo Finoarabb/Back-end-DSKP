@@ -19,10 +19,10 @@ class Letter extends ResourceController
      *
      * @return mixed
      */
-    public function index()
+    public function index($tipe =null)
     {
-        $letters = $this->model->findAll();
-        return $this->respond($letters);
+        $data = $this->model->where($tipe==='masuk'?'tujuan':'asal','')->findAll();
+        return $this->respond($data);
     }
 
     /**
@@ -141,5 +141,7 @@ class Letter extends ResourceController
         $data = $this->model->find('approval',true);
         return $this->respond($data);
     }    
+
+   
      
 }
