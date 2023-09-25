@@ -106,7 +106,7 @@ class User extends ResourceController
     {
         $rules = ['role'=>'required|in_list[admin,pimpinan,staff,operator,supervisor]'];
         if(!$this->validate($rules)) return $this->fail($this->validator->getErrors());       
-        $role = $this->request->getJSON('role');
+        $role = $this->request->getVar('role');
         if(empty($this->model->find($id))) return $this->fail('user tidak ditemukan');
         $result = $this->model->update($id, ['role' => $role]);
 

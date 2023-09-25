@@ -37,8 +37,8 @@ class Disposisi extends Migration
             ],
         ]);
         $this->forge->addPrimaryKey('id');
-        $this->forge->addForeignKey('uid', 'users', 'id');
-        $this->forge->addForeignKey('no_surat', 'letters', 'no_surat');
+        $this->forge->addForeignKey('uid', 'users', 'id','cascade','cascade');
+        $this->forge->addForeignKey('no_surat', 'letters', 'no_surat','cascade','cascade');
         $this->forge->createTable('disposisi');
     }
 

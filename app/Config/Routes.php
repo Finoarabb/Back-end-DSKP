@@ -15,4 +15,5 @@ $routes->resource('user', ['except' => 'new,edit', 'filter' => 'role:admin']);
 $routes->get('approvedLetter', 'Letter::approvedLetter',['filter'=>'role:pimpinan']);
 $routes->post('dispose/(:any)', 'Disposisi::dispose/$1',['filter'=>'role:pimpinan']);
 $routes->get('disposedLetter', 'Disposisi::index');
+// $routes->post('user/(:num)','User::update/$1',['filter'=>'role:admin']);
 $routes->get('surat_(:segment)', 'Letter::index/$1',[], ['segment' => '(masuk|keluar)']);
