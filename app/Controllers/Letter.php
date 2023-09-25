@@ -52,13 +52,14 @@ class Letter extends ResourceController
      * @return mixed
      */
     public function create()
-    {
+    {   $tipe = $this->request->getVar('tipe');
+        $jenis=$tipe==='masuk'?'asal':'tujuan';
+
         $rules = [
             'file' => 'uploaded[file]|mime_in[file,image/jpg,image/jpeg,image/png,application/pdf]',
             'no_surat' => 'required|is_unique[letters.no_surat]',
-            'tanggal' => 'required|valid_date[d/m/Y]',
-            'asal' => 'oneway[tujuan]',
-            'tujuan' => 'oneway[asal]'
+            'tanggal' => 'required',
+            $jenis=> 'required'
         ];
         $errors = [
             'file' => [
@@ -66,20 +67,13 @@ class Letter extends ResourceController
                 'mime_in' => 'Sertakan dalam format pdf atau Gambar'
             ],
             'no_surat' => ['required' => 'Silahkan sertakan nomor surat','is_unique'=>'Nomor Surat sudah digunakan'],
-            'tanggal' => ['required' => 'Silahkan sertakan tanggal surat', 'valid_date' => 'Sesuaikan formatnya 01/01/2014'],
-            'asal' => ['oneway' => 'hanya sertakan jika surat masuk'],
-            'tujuan' => ['oneway' => 'Hanya sertakan jika surat keluar'],
+            'tanggal' => ['required' => 'Silahkan sertakan tanggal surat'],
+            $jenis => ['required' => 'Silahkan sertakan '.$tipe .' surat']
+            
         ];
         if (!$this->validate($rules, $errors)) return $this->fail($this->validator->getErrors());
 
-        // Surat Masuk atau Surat keluar
-        if (!empty($this->request->getVar('tujuan'))) {
-            $data['tujuan'] = $this->request->getVar('tujuan');
-            $srt_ = 'keluar';
-        } else {
-            $data['asal'] = $this->request->getVar('asal');
-            $srt_ = 'masuk';
-        }
+        
 
         // File upload
         $file = $this->request->getFile('file');        
@@ -89,11 +83,11 @@ class Letter extends ResourceController
 
         $data['no_surat'] = $this->request->getVar('no_surat');
         $data['tanggal'] = date('Y-m-d',strtotime($this->request->getVar('tanggal')));
-        
+        $data[$jenis] = $this->request->getVar($jenis);
         $data['file'] = $filename;
         $letter = $this->model->insert($data,false);
         if(!$letter) return $this->fail('Gagal Menambahkan surat');
-        if (!$file->hasMoved()) $file->move(WRITEPATH . '/uploads/' . $srt_,$filename);
+        if(!$file->hasMoved()) $file->move(WRITEPATH . '/uploads/' . $tipe,$filename);
         return $this->respond($data);
     }
 
