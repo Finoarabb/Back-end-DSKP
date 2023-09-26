@@ -77,11 +77,13 @@ class User extends ResourceController
             ]
         ];
         if (!$this->validate($rules,$errors))  return $this->fail($this->validator->getErrors()); 
+        $role = $this->request->getVar('role');
         $data = [
             'username'=> $this->request->getVar('username'),
             'password'=> $this->request->getVar('password'),
             'nama'=> $this->request->getVar('nama'),
         ];
+        if(!empty($role)) $data['role']=$role;
         $user = $this->model->insert($data,false);
         if(!$user) return $this->fail('Gagal Menambahkan User');
         return $this->respondCreated($data);
