@@ -8,6 +8,8 @@ use App\Models\Letter;
 use App\Models\User;
 use CodeIgniter\API\ResponseTrait;
 
+use function PHPSTORM_META\map;
+
 class Disposisi extends BaseController
 {
     use ResponseTrait;
@@ -25,7 +27,7 @@ class Disposisi extends BaseController
         $uid = verify_jwt()->uid;
         $disp = $this->disp_model
         ->where('uid', $uid)
-        ->join('letters','disposisi.no_surat=letters.no_surat','right')
+        ->join('letters','disposisi.sid=letters.no_surat','right')
         ->findAll();
         // $no_surat = array_column($disp, 'no_surat');
         // $surat = $this->letter_model->find($no_surat);
@@ -34,14 +36,15 @@ class Disposisi extends BaseController
         return $this->respond($disp);
     }
 
-    public function dispose($no_surat) {
+    public function dispose() {
         $data=[];
         $tujuan = $this->request->getJSON();        
-        foreach($tujuan->ids as $id){
-            $temp = $this->disp_model->where(['uid'=>$id,'no_surat'=>$no_surat])->findAll();
-            if(empty($temp))
-               $data[]=['uid'=>$id,'no_surat'=>$no_surat,'pesan'=>$tujuan->pesan]; 
-        }
+        
+        
+            $temp = $this->disp_model->whereIn('uid',$tujuan->disposalTarget)->where('sid',$tujuan->sid)->findAll();
+            if(!empty($temp)) return $this->fail('Disposisi Sudah Dilakukan');
+            foreach($tujuan->disposalTarget as $item)
+            $data[]=['uid'=>$item,'sid'=>$tujuan->sid,'pesan'=>$tujuan->pesan]; 
         $result=$this->disp_model->insertBatch($data);
         return $this->respond($result);
     }

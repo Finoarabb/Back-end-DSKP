@@ -8,7 +8,7 @@ class Letter extends Model
 {
     protected $DBGroup          = 'default';
     protected $table            = 'letters';
-    protected $primaryKey       = 'no_surat';
+    protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;

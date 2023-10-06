@@ -16,10 +16,10 @@ class Disposisi extends Migration
                 'constraint' => '5',
                 'auto_increment' => true
             ],
-            'no_surat' => [
-                'type'=>'VARCHAR',
-                'constraint'=>50,
-                'null' => false,
+            'sid' => [
+                'type' => 'INT',
+                'constraint' => 5,
+                'null' => false
             ],
             'uid' => [
                 'type' => 'INT',
@@ -38,7 +38,7 @@ class Disposisi extends Migration
         ]);
         $this->forge->addPrimaryKey('id');
         $this->forge->addForeignKey('uid', 'users', 'id','cascade','cascade');
-        $this->forge->addForeignKey('no_surat', 'letters', 'no_surat','cascade','cascade');
+        $this->forge->addForeignKey('sid', 'letters', 'id','cascade','cascade');
         $this->forge->createTable('disposisi');
     }
 

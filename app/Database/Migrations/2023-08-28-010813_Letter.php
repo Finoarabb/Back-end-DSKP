@@ -11,6 +11,11 @@ class Letter extends Migration
     public function up()
     {
         $this->forge->addField([
+            'id' => [
+                'type' => 'INT',
+                'constraint' => 5,
+                'auto_increment' => true
+            ],
             'no_surat' => [
                 'type' => 'VARCHAR',
                 'constraint' => '50',
@@ -33,7 +38,7 @@ class Letter extends Migration
             'tanggal' => [
                 'type' => 'date'
             ],
-            'Approval' =>[
+            'approval' =>[
                 'type' => 'boolean',
             ],            
             'created_at' =>[
@@ -43,7 +48,7 @@ class Letter extends Migration
                 'type' => 'datetime',
             ]
         ]);
-        $this->forge->addKey('no_surat', true);
+        $this->forge->addKey('id', true);
         $this->forge->createTable('Letters');
     }
 

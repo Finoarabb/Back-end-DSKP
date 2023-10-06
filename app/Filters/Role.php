@@ -33,7 +33,7 @@ class Role implements FilterInterface
         ->setJSON(['msg' => 'Silahkan login terlebih dahulu'])
         ->setStatusCode(ResponseInterface::HTTP_UNAUTHORIZED);
         $userRole = verify_jwt()->role;
-        if($userRole!==$arguments[0]) 
+        if(!in_array($userRole,$arguments))
         return Services::response()
         ->setJSON(['msg' => 'Maaf, Anda tidak memiliki akses'])
         ->setStatusCode(ResponseInterface::HTTP_UNAUTHORIZED);
